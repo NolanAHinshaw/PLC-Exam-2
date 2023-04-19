@@ -1,0 +1,133 @@
+/* <IF_STMT> --> `if` `(` <BOOL_EXPR> `)` <BLOCK>  [ `else`  <BLOCK> ] */
+IF_STMT('if' '(' <bool_expr> ')' <stmt1>, s)
+    if (BOOL_EXPR(<bool_expr>, s) == error)
+        return error();
+    else if (BOOL_EXPR(<bool_expr>, s) == true){
+        if(STMT(<stmt1>, s) == error)
+            return error();
+        return s = STMT(<stmt1>, s);
+    } else if (BOOL_EXPR(<bool_expr>, s) == false){
+        return s;
+    }
+
+IF_STMT(if ( <bool_expr> ) <stmt1> else <stmt2>, s)
+    if (BOOL_EXPR(<bool_expr>, s) == error)
+        return error();
+    else if (BOOL_EXPR(<bool_expr>, s) == true){
+        if(STMT(<stmt1>, s) == error)
+            return error();
+        return s = STMT(<stmt1>, s);
+    } else if (BOOL_EXPR(<bool_expr>, s) == false){
+        if(STMT(<stmt2>, s) == error)
+            return error();
+        return s = STMT(<stmt2>, s);
+    }
+
+/* <STMT> --> <IF_STMT> | <BLOCK> | <ASSIGN> | <DECLARE> |<WHILE_LOOP> */
+STMT( <IF_STMT> || <BLOCK> || <ASSIGN> || <DECLARE> || <WHILE>, s )
+    if(IF_STMT())
+        return s = IF_STMT(<IF_STMT>, s);
+    else if(BLOCK())
+        return s = BLOCK(<BLOCK>, s);
+    else if(ASSIGN())
+        return s = ASSIGN(<ASSIGN>, s);
+    else if(DECLARE())
+        return s = DECLARE(<DECLARE>, s);
+    else if(WHILE())
+        return s = WHILE(<WHILE>, s);
+
+/* <ASSIGN> --> ID `=` <EXPR> */
+ASSIGN( ID = <expr>, s )
+    if( ID == error )
+        return error();
+    else if(EXPR(<expr>, s) == true)
+        return s = EXPR(<expr>, s);
+    else {
+        return error();
+    }
+
+
+/* <EXPR> --> <TERM> {(`+`|`-`) <TERM>} */
+EXPR(<term1> ('+'|'-') <term2>, s)
+    if(TERM(<term1>, s) == error)
+        return error();
+    else if(TERM(<term1>, s) == true){
+        if(TERM(<term2>, s) == error)
+            return error();
+        return s = TERM(<term2>, s);
+    }
+
+/* <DECLARE> --> `DataType` ID {`,` ID } */
+DECLARE(DataType ID {',' ID }, s)
+    if(DataType == error)
+        return error();
+    else if(ID == error)
+        return error();
+    else {
+        return s;
+    }
+    
+/* <WHILE_LOOP> --> `while` `(` <BOOL_EXPR> `)` <BLOCK> */
+WHILE('while' '(' <bool_expr> ')' <block>, s)
+    if(BOOL_EXPR(<bool_expr>, s) == error)
+        return error();
+    else if (BOOL_EXPR(<bool_expr>, s) == true){
+        if(BLOCK(<block>, s) == true)
+            return s = BLOCK(<block>, s);
+    } 
+    else if(BOOL_EXPR(<bool_expr>, s) == false)
+        return s;
+
+/* <BOOL_EXPR> --> <BTERM> {(`>`|`<`|`>=`|`<=`) <BTERM>} */
+BOOL_EXPR(<bterm1> ('>'|'<'|'>='|'<=') <bterm2> ,s)
+    if(BTERM(<bterm1>,s) == error)
+        return error();
+    else if(BTERM(<bterm1>, s) == true){
+        if(BTERM(<bterm2>, s) == error)
+            return error();
+        return s = BTERM(<term2>, s);
+    }
+
+/* <BAND> --> <BOR> {`&&` <BOR>} */
+BOOL_AND(<BOR1> && <BOR2>, s)
+    if (BOOL_OR(<BOR1>, s) == error)
+        return error();
+    else if (BOOL_OR(<BOR1>, s) == true){
+        if(BOOL_OR(<BOR2>, s) == error)
+            return error();
+        return BOOL_OR(<BOR1>, s);
+    } else {
+        if(BOOL_OR(<BOR2>, s) == error)
+            return error();
+        return false;
+    }
+
+/* <BOOL_EXPR> --> <BTERM> {(`>`|`<`|`>=`|`<=`) <BTERM>} */
+BOOL_EXPR(<bterm1> ('>'|'<'|'>='|'<=') <bterm2> ,s)
+    if(BTERM(<bterm1>,s) == error)
+        return error();
+    else if(BTERM(<bterm1>, s) == true){
+        if(BTERM(<bterm2>, s) == error)
+            return error();
+        return s = BTERM(<term2>, s);
+    }
+
+/* <FACT> --> ID | INT_LIT | FLOAT_LIT | `(` <EXPR> `)` */
+FACT(ID | INT_LIT | FLOAT_LIT | '(' <expr> ')')
+    if(EXPR(<expr>, s) == error)
+        return error();
+    else if(EXPR(<expr>, s) == true)
+        return s = EXPR(<expr>, s);
+    else {
+        return error();
+    }
+
+/* BOR> --> <EXPR> */
+BOR(<expr>, s)
+    if(EXPR(<expr>, s) == error)
+        return error();
+    else if(EXPR(<expr>, s) == true)
+        return s = EXPR(<expr>, s);
+    else {
+        return error();
+    }
