@@ -1,10 +1,10 @@
-if ( x > 10) { y = x + 5; } else { y = x - 2; }
-{ x = x + 1; }
-y = x * 5;
-while (x < 100) { x = x + 1; }
-x = a + b - c;
-y = a * b / c % d;
-x = a > b <= c < d >= e;
-while (x < 100) x = x + 1;
-if (x < 10) x = x + 1; else x = x - 1;
-if (x > 10) y = x + 5; else { y = x - 2; }
+if ( x > 10) { y = x + 5 ; } else { y = x - 2 ; }
+{ x = x + 1 ; }
+y = x * 5 ;
+while (x < 100) { x = x + 1 ; }
+x = a + b - c ;
+y = a * b / c % d ;
+x = a > b <= c < d >= e ;
+while (x < 100) x = x + 1 ;
+if (x < 10) x = x + 1 ; else x = x - 1 ;
+if (x > 10) y = x + 5 ; else { y = x - 2 ; }
