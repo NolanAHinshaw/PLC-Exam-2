@@ -132,3 +132,12 @@ BOR(<expr>, s)
         return error();
     }
 
+/* <TERM> --> <FACT> {(`*`|`/`|`%`) <FACT>} */
+TERM(<fact1> ('*'|'/'|'%') <fact2>) 
+    if(TERM(<fact1>, s) == error)
+        return error();
+    else if(TERM(<fact1>, s) == true){
+        if(TERM(<fact2>, s) == error)
+            return error();
+        return s = TERM(<fact2>, s);
+    }
