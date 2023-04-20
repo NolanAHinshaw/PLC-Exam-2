@@ -73,7 +73,7 @@ WHILE('while' '(' <bool_expr> ')' <block>, s)
         return error();
     else if (BOOL_EXPR(<bool_expr>, s) == true){
         if(BLOCK(<block>, s) == true)
-            return s = BLOCK(<block>, s);
+            return WHILE('while' '(' <bool_expr> ')' <block>, BLOCK(<block>,s));
     } 
     else if(BOOL_EXPR(<bool_expr>, s) == false)
         return s;
@@ -131,3 +131,4 @@ BOR(<expr>, s)
     else {
         return error();
     }
+
